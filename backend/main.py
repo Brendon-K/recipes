@@ -18,7 +18,8 @@ app = FastAPI()
 # will include github pages link when i am good to start that up
 origins = [
   "http://127.0.0.1:5500",
-  "http://localhost:5500"
+  "http://localhost:5500",
+  "http://brendon-k.github.io",
 ]
 
 app.add_middleware(
