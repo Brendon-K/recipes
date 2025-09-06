@@ -21,14 +21,19 @@
   <!-- This page will just be for viewing recipes, with a link to the add a recipe page -->
   <section id="search-recipe-section">
     <h2>Select a Recipe</h2>
-    <input list="recipe-options" id="recipe-search" placeholder="Select a recipe" autocomplete="on">
-    <datalist id="recipe-options"></datalist>
+    <form id="recipe-search-form">
+      <label>Recipe Name</label>
+      <input list="recipe-options" id="recipe-search" placeholder="Select a recipe" autocomplete="on">
+      <datalist id="recipe-options"></datalist>
+      <button type="submit">Search</button>
+    </form>
   </section>
 
   <section id="selected-recipe-section">
     <div id="selected-recipe-div"></div>
   </section>
-
+  
+  <hr>
   <div id="footer"></div>
 </body>
 </html>
