@@ -1,7 +1,6 @@
 https://brendon-k.github.io/recipes/frontend/
 
 Notes to add:
-- Sort ingredients by category
 - Remove time from recipe list if it's 0
 - Also change formatting of times. It's kinda ugly.
 - *maybe* auto suggest units for consistency
