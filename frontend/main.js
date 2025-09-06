@@ -23,26 +23,31 @@ $(document).ready(function(){
   
   // create html for the given recipe, and put it in the selected-recipe-div element
   function display_recipe(recipe) {
+    console.log(recipe.ingredients);
     // get ingredient list
+    let ingredients = {};
 
-    /* This block of code is for later. 
-    ** Eventually I want to change the ingredient display so that it's organized by category. 
-    ** Right now I will keep it simple so I can move on.
-    ** Also p sure I want to display it in a table so that it's all aligned... maybe probably ugly though?
-    // get the ingredient categories
-    ingredient_categories = []
+    // populate ingredients list with keys that are each ingredient category
+    // and values that are the ingredient that belongs to the category
     recipe.ingredients.forEach(ingredient => {
-      if (!ingredient_categories.includes(ingredient.category)) {
-        ingredient_categories.push(ingredient.category);
+      if (Object.keys(ingredients).includes(ingredient.category)) {
+          ingredients[ingredient.category].push(ingredient);
+      } else {
+          ingredients[ingredient.category] = [ingredient];
       }
     });
-    */
 
-    ingredients_html = recipe.ingredients.map(ingredient => `<li>${ingredient.quantity} ${ingredient.unit} ${ingredient.name}</li>`).join("");
-
+    // generate html for ingredient list ordered by category
+    let ingredient_categories_html = Object.entries(ingredients).map(([category, ingredient_list]) => `
+      <h4>${category}</h4>
+      <ul>
+        ${ingredient_list.map(ingredient => `<li>${ingredient.quantity} ${ingredient.unit} ${ingredient.name}</li>`).join("")}
+      </ul>  
+    `).join("");
+    
     // get instructions
-    instructions_detailed_html = recipe.instructions.detailed.map(step => `<li>${step}</li>`).join("");
-    instructions_simple_html = recipe.instructions.simple.map(step => `<li>${step}</li>`).join("");
+    let instructions_detailed_html = recipe.instructions.detailed.map(step => `<li>${step}</li>`).join("");
+    let instructions_simple_html = recipe.instructions.simple.map(step => `<li>${step}</li>`).join("");
 
     // generate html for full recipe info
     const $recipe_html = $(`
@@ -56,7 +61,7 @@ $(document).ready(function(){
           
           <div class="ingredients">
             <h3>Ingredients</h3>
-            <ul>${ingredients_html}</ul>
+            ${ingredient_categories_html}
           </div>
           
           <div class="instructions">
