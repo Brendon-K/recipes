@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipes</title>
+  <link href="interface.css" type="text/css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js" type="text/javascript"></script>
+  <script src="add-recipe.js" type="text/javascript"></script>
+  <script>
+    $(function(){
+      $("#header").load("header.html"); 
+      $("#footer").load("footer.html"); 
+    });
+  </script>
+</head>
+<body>
+  <div id="header"></div>
+
+  <!-- This page will just be for adding recipes -->
+  <a href="index.html">Search for a Recipe</a>
+
+  <!-- Supabase login -->
+  <!-- I only want approved people to be able to add stuff -->
+  <section id="login-section">
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Log In</button>
+    </form>
+  </section>
+
+  <!-- This will user stuff that only shows when logged in -->
+  <section id="logged-in-section">
+    <p id="user-email"></p>
+    <button type="button" id="log-out-button">Log Out</button>
+  </section>
+
+  <!-- Form for adding a recipe -->
+  <section id="add-recipe-section">
+    <h2>Add a Recipe</h2>
+    <form id="add-recipe-form">
+      <label>Title</label>
+      <input type="text" id="title" placeholder="Recipe Title" required />
+
+      <label>Description</label>
+      <input type="text" id="description" placeholder="Description" required />
+
+      <label>Servings</label>
+      <input type="number" id="servings" placeholder="Number of Servings" required />
+
+      <label>Prep Time</label>
+      <input type="number" id="prep_time" placeholder="Prep time in minutes" required />
+
+      <label>Cook Time</label>
+      <input type="number" id="cook_time" placeholder="Cook time in minutes" required />
+
+      <label>Rest Time</label>
+      <input type="number" id="rest_time" placeholder="Rest time in minutes" required />
+
+      <!-- Ingredients Block -->
+
+      <h3>Ingredients</h3>
+      <div id="add-ingredients-container">
+        <div class="add-ingredient-row">
+          <label>Name</label>
+          <input type="text" class="ingredient-name" placeholder="Ingredient Name" required />
+
+          <label>Quantity</label>
+          <input type="number" class="ingredient-quantity" placeholder="Quantity" step="any" min="0" required />
+
+          <label>Unit</label>
+          <input type="text" class="ingredient-unit" placeholder="Unit of ingredient" required />
+
+          <label>Category</label>
+          <input type="text" class="ingredient-category" placeholder="Part of the dish this ingredient is for" required />
+        </div>
+      </div>
+      <button type="button" id="add-row-ingredient">Add row</button>
+      <button type="button" id="remove-row-ingredient">Remove last row</button>
+
+      <!-- End Ingredients Block -->
+
+      <!-- Instructions Block -->
+
+      <h3>Instructions</h3>
+      <h4>Detailed Instructions</h4>
+      <div id="add-detailed-instructions-container">
+        <div class="add-instruction-row">
+          <input type="text" class="add-instruction-step" placeholder="Detailed step description" required />
+        </div>
+      </div>
+      <button type="button" id="add-row-detailed-instruction">Add row</button>
+      <button type="button" id="remove-row-detailed-instruction">Remove last row</button>
+      
+      <h4>Simple Instructions</h4>
+      <div id="add-simple-instructions-container">
+        <div class="add-instruction-row">
+          <input type="text" class="add-instruction-step" placeholder="Simple step description" required />
+        </div>
+      </div>
+      <button type="button" id="add-row-simple-instruction">Add row</button>
+      <button type="button" id="remove-row-simple-instruction">Remove last row</button>
+
+      <!-- End Instructions Block -->
+
+      <label>Recipe Author</label>
+      <input type="text" id="credit_author" placeholder="Recipe Author" required />
+
+      <label>Recipe Publisher</label>
+      <input type="text" id="credit_domain" placeholder="Recipe Publisher, for example Allrecipes" required />
+
+      <label>Recipe URL</label>
+      <input type="url" id="credit_url" placeholder="Link to recipe" required />
+
+      <button type="submit">Submit Recipe</button>
+    </form>
+  </section>
+  <!-- End recipe add form -->
+
+  <hr>
+  <div id="footer"></div>
+</body>
+</html>
