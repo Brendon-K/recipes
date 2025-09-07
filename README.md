@@ -2,6 +2,7 @@ https://brendon-k.github.io/recipes/frontend/
 
 Notes to add:
 - [x] Sort ingredients by category
+- [ ] Make autocomplete in recipe search work on mobile
 - [ ] CSS...
 - [ ] Remove time from recipe entry if it's 0
 - [ ] Convert minutes to hours, days if lots of minutes
