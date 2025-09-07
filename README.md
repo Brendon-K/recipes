@@ -3,7 +3,7 @@ https://brendon-k.github.io/recipes/frontend/
 Notes to add:
 - [x] Sort ingredients by category
 - [ ] CSS...
-- [ ]- Remove time from recipe entry if it's 0
+- [ ] Remove time from recipe entry if it's 0
 - [ ] Convert minutes to hours, days if lots of minutes
 - [ ] Also change formatting of times section. It's kinda ugly, but I guess that's part of CSS
 - [ ] Able to add tags to recipes so that you can search for a type of recipe. e.g. chicken, vegetarian, breakfast, snack, dessert, etc.
