@@ -5,21 +5,39 @@ $(document).ready(function(){
   async function fetch_recipes() {
     try {
       recipes = await $.getJSON(`${BACKEND_URL}/get-recipes`);
+      console.log('1', recipes);
       
       // populate the datalist for the search bar in index.html
       const $datalist = $("#recipe-options");
       $datalist.empty();
       recipes.forEach(recipe => $datalist.append(`<option value="${recipe.title}">`));
+      search_autocomplete();
     } catch (err) {
       console.error("Failed to fetch recipes:", err);
     }
   }
 
+  function search_autocomplete() {
+    const RECIPE_TITLES = recipes.map(recipe => recipe.title);
+
+    $("#recipe-search").autocomplete({
+      source: RECIPE_TITLES,
+      minLength: 1,
+      delay: 100,
+      select: function(event, ui) {
+        const SELECTED_TITLE = ui.item.value;
+        const RECIPE_TITLE = recipes.find(recipe => recipe.title === SELECTED_TITLE);
+        if (RECIPE_TITLE) {
+          display_recipe(RECIPE_TITLE);
+        }
+      }
+    });
+  }
+
   fetch_recipes();
-  
+
   // create html for the given recipe, and put it in the selected-recipe-div element
   function display_recipe(recipe) {
-    console.log(recipe.ingredients);
     // get ingredient list
     let ingredients = {};
 
