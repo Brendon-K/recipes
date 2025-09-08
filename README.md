@@ -2,11 +2,13 @@ https://brendon-k.github.io/recipes/frontend/
 
 Notes to add:
 - [x] Sort ingredients by category
+- [ ] Make autocomplete in recipe search work on mobile
 - [ ] CSS...
 - [ ] Remove time from recipe entry if it's 0
 - [ ] Convert minutes to hours, days if lots of minutes
 - [ ] Also change formatting of times section. It's kinda ugly, but I guess that's part of CSS
 - [ ] Able to add tags to recipes so that you can search for a type of recipe. e.g. chicken, vegetarian, breakfast, snack, dessert, etc.
+- [ ] Make selectable search function so you can search recipes by various terms. domain, author, tag, ingredient, etc.
 - [ ] *maybe* auto suggest units for consistency
 - [ ] *maybe* keep a list of ingredients that have been added to recipes, auto suggest for consistency
 - [ ] *maybe* add a new category in ingredients for modifiers. For example: "Fresh," "Warmed," "Canned," etc.
