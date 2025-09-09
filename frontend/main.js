@@ -109,6 +109,9 @@ $(document).ready(function(){
     // clear displayed recipe before showing links
     $("#selected-recipe-div").empty();
 
+    // clear existing buttons
+    $("#recipe-links-div").empty();
+
     let $recipe_list_html = $('<div>');
 
     // make button for each recipe
