@@ -33,14 +33,18 @@
   <section id="search-recipe-section">
     <h2>Select a Recipe</h2>
     <form id="recipe-search-form">
-      <label>Recipe Name</label>
-      <input id="recipe-search" type="text" placeholder="Select a recipe">
-      <!-- Old but keeping for now until I know new one works
-      <input list="recipe-options" id="recipe-search" placeholder="Select a recipe" autocomplete="on">
-      <datalist id="recipe-options"></datalist>
-      -->
-      <button type="submit">Search</button>
+      <label for="search-term">Search: </label>
+      <select name="search-term" id="search-drop">
+        <option value="name">Recipe Name</option>
+        <option value="tag">Tag</option>
+        <option value="ingredient">Ingredient</option>
+      </select>
+      <input id="recipe-search" type="text" placeholder="Search by recipe name">
     </form>
+  </section>
+
+  <section id="recipe-links-section">
+    <div id="recipe-links-div"></div>
   </section>
 
   <section id="selected-recipe-section">

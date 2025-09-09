@@ -1,40 +1,135 @@
 $(document).ready(function(){
+  console.log(BACKEND_URL);
+  // clear search on refresh
+  $("#recipe-search-form")[0].reset();
+
   // get recipes
   let recipes = [];
 
+  // get all recipes from the database and store them in recipes array
   async function fetch_recipes() {
     try {
       recipes = await $.getJSON(`${BACKEND_URL}/get-recipes`);
-      console.log('1', recipes);
       
       // populate the datalist for the search bar in index.html
       const $datalist = $("#recipe-options");
       $datalist.empty();
       recipes.forEach(recipe => $datalist.append(`<option value="${recipe.title}">`));
+      console.log(recipes);
       search_autocomplete();
     } catch (err) {
       console.error("Failed to fetch recipes:", err);
     }
   }
-
+  
+  // autocomplete function for the search bar
   function search_autocomplete() {
-    const RECIPE_TITLES = recipes.map(recipe => recipe.title);
+    const $SEARCH_TERM = $("#search-drop");
+    const $SEARCH_INPUT = $("#recipe-search");
 
-    $("#recipe-search").autocomplete({
-      source: RECIPE_TITLES,
+    $SEARCH_INPUT.autocomplete({
+      source: function(request, response) {
+        const TERM = $SEARCH_TERM.val();
+        const SEARCH = request.term.toLowerCase();
+
+        let matches = [];
+
+        switch (TERM) {
+          // auto complete for name searching
+          case "name":
+            matches = recipes
+              .map(recipe => recipe.title)
+              .filter(title => title.toLowerCase().includes(SEARCH));
+            break;
+          // auto complete for tag searching
+          case "tag":
+            matches = recipes
+              .flatMap(recipe => recipe.tags.map(tag => ({tag_name: tag.tag_name, recipe})))
+              .filter(obj => obj.tag_name.toLowerCase().includes(SEARCH))
+              .map(obj => obj.tag_name);
+            // remove duplicates
+            matches = [...new Set(matches)];
+            break;
+          // auto complete for ingredient searching
+          case "ingredient":
+            matches = recipes
+              .flatMap(recipe => recipe.ingredients.map(ingredient => ({ingredient_name: ingredient.name, recipe})))
+              .filter(obj => obj.ingredient_name.toLowerCase().includes(SEARCH))
+              .map(obj => obj.ingredient_name);
+            // remove duplicates
+            matches = [...new Set(matches)];
+            break;
+          default:
+            console.log("How did you even get here? What are you doing?");
+            break;
+        }
+        response(matches);
+      },
       minLength: 1,
       delay: 100,
       select: function(event, ui) {
-        const SELECTED_TITLE = ui.item.value;
-        const RECIPE_TITLE = recipes.find(recipe => recipe.title === SELECTED_TITLE);
-        if (RECIPE_TITLE) {
-          display_recipe(RECIPE_TITLE);
+        const SELECTED_VALUE = ui.item.value;
+        const TERM = $SEARCH_TERM.val();
+
+        let matches = [];
+
+        // filter the recipes based on the search terms
+        switch (TERM) {
+          case "name":
+            matches = recipes.filter(recipe => recipe.title === SELECTED_VALUE);
+            break;
+          case "tag":
+            matches = recipes.filter(recipe => recipe.tags.some(tag => tag.tag_name === SELECTED_VALUE));
+            break;
+          case "ingredient":
+            matches = recipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.name === SELECTED_VALUE));
+            break;
+          default:
+            console.log("How did you even get here? What are you doing?");
+            break;
+        }
+
+        // if only 1 result, just show it. 
+        if (matches.length === 1) {
+          display_recipe(matches[0]);
+        // if more than 1, display a list of links to click
+        } else if (matches.length > 1) {
+          display_recipe_list(matches);
+        } else {
+          alert("No recipes found!");
         }
       }
     });
   }
 
   fetch_recipes();
+
+  // display a list of clickable recipes
+  function display_recipe_list(recipes) {
+    // clear displayed recipe before showing links
+    $("#selected-recipe-div").empty();
+
+    let $recipe_list_html = $('<div>');
+
+    // make button for each recipe
+    recipes.forEach(recipe => {
+      $recipe_list_html.append(`<button type="button" class="recipe-link">${recipe.title}</button>`);
+    });
+
+    // show recipes
+    $("#recipe-links-div").append($recipe_list_html);
+  }
+
+  $("#recipe-links-div").on("click", ".recipe-link", function () {
+    // get recipe name from button text
+    const RECIPE_NAME = this.textContent;
+
+    // get recipe object from list of all recipes
+    const recipe = recipes.find(r => r.title === RECIPE_NAME);
+
+    // display the clicked recipe
+    display_recipe(recipe);
+  });
 
   // create html for the given recipe, and put it in the selected-recipe-div element
   function display_recipe(recipe) {
@@ -113,20 +208,23 @@ $(document).ready(function(){
     $("#selected-recipe-div").append($recipe_html);
   }
 
-  // handle form submit on recipe search
-  $("#recipe-search-form").submit(async function(e) {
-    e.preventDefault();
-
-    // read form contents
-    const recipe_name = $("#recipe-search").val();
-
-    // find recipe that matches entry
-    recipes.forEach(recipe => {
-      // if match is found, display the recipe
-      if (recipe.title === recipe_name) {
-        display_recipe(recipe);
-      }
-    });
+  // change the placeholder in the search bar based on the selection
+  $("#search-drop").on('change', function() {
+    const TERM = this.value;
+    switch (TERM) {
+      case "name":
+        $("#recipe-search")[0].placeholder = "Search by recipe name";
+        break;
+      case "tag":
+        $("#recipe-search")[0].placeholder = "Search by tag";
+        break;
+      case "ingredient":
+        $("#recipe-search")[0].placeholder = "Search by ingredient";
+        break;
+      default:
+        $("#recipe-search")[0].placeholder = "What are you doing?";
+        console.log("How did you even get here? What are you doing?");
+        break;
+    }
   });
-  
 });
