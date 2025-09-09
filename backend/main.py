@@ -11,6 +11,8 @@ load_dotenv(Path(__file__).parent / ".env")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
 
+print("Running locally")
+
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 app = FastAPI()
@@ -36,6 +38,10 @@ class Ingredient(BaseModel):
   unit: str
   category: str
 
+class Tag(BaseModel):
+  name: str
+  description: str
+
 class Recipe(BaseModel):
   title: str
   description: str
@@ -45,6 +51,7 @@ class Recipe(BaseModel):
   rest_time: int
   ingredients: list[Ingredient]
   instructions: dict
+  tags: list[Tag]
   credit_author: str
   credit_domain: str
   credit_url: str
@@ -53,8 +60,21 @@ class Recipe(BaseModel):
 @app.get("/get-recipes")
 async def get_recipes():
   try:
-    res = supabase.table("recipes").select("*, ingredients(*)").execute()
-    return res.data
+    # get all recipes from database
+    recipes = supabase.table("recipes").select("*").execute().data
+
+    # add ingredients to each recipe
+    for recipe in recipes:
+      ingredients = supabase.table("ingredients").select("*").eq("recipe_id", recipe["id"]).execute().data
+      recipe["ingredients"] = ingredients
+
+    # add tags to each recipe
+    for recipe in recipes:
+      tag_links = supabase.table("recipe_tags").select("tag_id").eq("recipe_id", recipe["id"]).execute().data
+      tag_ids = [tag["tag_id"] for tag in tag_links]
+      tags = supabase.table("tags").select("*").in_("id", tag_ids).execute().data
+      recipe["tags"] = tags
+    return recipes
   except Exception as e:
     raise HTTPException(status_code=500, detail=str(e))
   
