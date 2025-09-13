@@ -1,59 +1,18 @@
 $(document).ready(function() {
 
   // clear form info on refresh
-  $("#login-form")[0].reset();
-
   $("#add-recipe-form")[0].reset();
 
-  const SUPABASE_URL = "https://jayysbkqgqcxkofsilym.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_YAV2w_0VJoZkFHgFGkWTSQ_zVa0q8-J";
-
-  const supabase_client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  $("#login-form").submit(async (e) => {
-    e.preventDefault();
-
-    const email = $("#email").val();
-    const password = $("#password").val();
-
-    const {data, error} = await supabase_client.auth.signInWithPassword({email, password});
-
-    if (error) {
-      alert(`Login Failed!\n${error.message}`);
-    } else {
-      alert("Logged in!");
-      sessionStorage.setItem("supabaseSesstion", JSON.stringify(data.session));
-    }
-  });
-
-  // allow the user to log out
-  $("#log-out-button").click(async function() {
-    const {error} = await supabase_client.auth.signOut();
-    if (error) {
-      alert(`Log out failed\nError: ${error.message}`);
-    } else {
-      alert("Logged out!");
-      $("#login-section").show();
-      $("#logged-in-section").hide();
-      $("#add-recipe-section").hide();
-    }
-  });
-
-  // if user is logged in, change what is shown, and vice versa
+  // if user is not logged in, don't show recipe form
   supabase_client.auth.onAuthStateChange((event, session) => {
     if (session) {
-      $("#login-section").hide();
-      $("#user-email").text(session.user.email);
-      $("#logged-in-section").show();
-      $("#add-recipe-section").show();
+      $("#add-recipe-section").removeClass("hidden");
+      $("#warning").addClass("hidden");
     } else {
-      $("#login-section").show();
-      $("#logged-in-section").hide();
-      $("#add-recipe-section").hide();
+      $("#add-recipe-section").addClass("hidden");
+      $("#warning").removeClass("hidden");
     }
   });
-
-
 
   // add more rows to ingredients section
   $("#add-row-ingredient").click(function(){
@@ -142,6 +101,7 @@ $(document).ready(function() {
       rest_time: $("#rest_time").val().trim(),
       ingredients: [],
       instructions: {},
+      tags: [],
       credit_author: $("#credit_author").val().trim(),
       credit_domain: $("#credit_domain").val().trim(),
       credit_url: $("#credit_url").val().trim()
@@ -168,6 +128,16 @@ $(document).ready(function() {
     recipe.instructions['simple'] = $("#add-simple-instructions-container .add-instruction-step").map(function() {
       return $(this).val().trim();
     }).get();
+
+    // format tags
+    const TAG_INPUT = $("#tags").val().split(", ");
+    // this is literally python wtf am I doing... TODO
+    TAG_INPUT.forEach(tag => {
+      recipe.tags.push({
+        "tag_name": tag,
+        "description": ""
+      });
+    });
 
     // POST
     try {

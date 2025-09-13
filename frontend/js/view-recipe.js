@@ -1,5 +1,4 @@
 $(document).ready(function(){
-  console.log(BACKEND_URL);
   // clear search on refresh
   $("#recipe-search-form")[0].reset();
 
@@ -101,7 +100,7 @@ $(document).ready(function(){
       }
     });
   }
-
+  
   fetch_recipes();
 
   // display a list of clickable recipes
@@ -123,6 +122,7 @@ $(document).ready(function(){
     $("#recipe-links-div").append($recipe_list_html);
   }
 
+  // display recipe when clicking a recipe link
   $("#recipe-links-div").on("click", ".recipe-link", function () {
     // get recipe name from button text
     const RECIPE_NAME = this.textContent;
@@ -169,8 +169,10 @@ $(document).ready(function(){
           <p>${recipe.description}</p>
           
           <p>Servings: ${recipe.servings}</p>
-          <p>Prep Time: ${recipe.prep_time} min | Cook Time: ${recipe.cook_time} min | Rest Time: ${recipe.rest_time} min</p>
-          
+          <p>${format_time("Prep Time", recipe.prep_time)}</p>
+          <p>${format_time("Cook Time", recipe.cook_time)}</p>
+          <p>${format_time("Rest Time", recipe.rest_time)}</p>
+
           <div class="ingredients">
             <h3>Ingredients</h3>
             ${ingredient_categories_html}
@@ -186,8 +188,43 @@ $(document).ready(function(){
           <div class="credit">
             <p>Recipe by ${recipe.credit_author}. <a href="${recipe.credit_url}" target="_blank">${recipe.credit_domain}</a></p>
           </div>
+
+          <div class="tags">
+            <div>
+              <h4>Tags</h4>
+              ${recipe.tags.map(tag => `<span class="tag">${tag.tag_name}</span>`).join(", ")}
+            </div>
+          </div>
         </div>
     `);
+
+    // given a label and minutes, output time in hr, min format.
+    // if minutes is 0, will return empty string
+    // formatting: "label: xx hr, xx min"
+    function format_time(label, minutes) {
+      const HOURS = parseInt(minutes / 60);
+      const MINS = parseInt(minutes % 60);
+      let text = ''
+
+      // if there is a time, fill out string
+      if (HOURS || MINS) {
+        text += `${label}: `;
+        // if there are hours, then display hours
+        if (HOURS) {
+          text += `${HOURS} hr`;
+          // show comma if there are hours and minutes
+          if (MINS) {
+            text += ', ';
+          }
+        }
+        // if there are mins, then display mins
+        if (MINS) {
+          text += `${MINS} min`;
+        }
+      }
+
+      return text;
+    }
 
     // click handler for instructions toggle button
     // switches between simple and detailed instructions on click

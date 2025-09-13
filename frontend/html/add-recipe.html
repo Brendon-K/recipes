@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recipes</title>
-  <link href="interface.css" type="text/css" rel="stylesheet">
+  <link href="../css/interface.css" type="text/css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="config.js" type="text/javascript"></script>
-  <script src="add-recipe.js" type="text/javascript"></script>
+  <script src="../js/config.js" type="text/javascript"></script>
+  <script src="../js/main.js" type="text/javascript"></script>
+  <script src="../js/add-recipe.js" type="text/javascript"></script>
+  <!-- Load header & footer -->
   <script>
     $(function(){
       $("#header").load("header.html"); 
@@ -18,25 +20,12 @@
 </head>
 <body>
   <div id="header"></div>
-
   <!-- This page will just be for adding recipes -->
-  <a href="index.html">Search for a Recipe</a>
 
-  <!-- Supabase login -->
-  <!-- I only want approved people to be able to add stuff -->
-  <section id="login-section">
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Log In</button>
-    </form>
-  </section>
-
-  <!-- This will user stuff that only shows when logged in -->
-  <section id="logged-in-section">
-    <p id="user-email"></p>
-    <button type="button" id="log-out-button">Log Out</button>
-  </section>
+  <!-- Show message if user is not logged in -->
+    <section id="warning">
+      <p>You need to be logged in to be able to add recipes!</p>
+    </section>
 
   <!-- Form for adding a recipe -->
   <section id="add-recipe-section">
@@ -106,6 +95,11 @@
 
       <!-- End Instructions Block -->
 
+      <label>Tags</label>
+      <input type="text" id="tags" placeholder="Enter a list of tags (comma-separated)" required />
+
+      <!-- Credit Block -->
+
       <label>Recipe Author</label>
       <input type="text" id="credit_author" placeholder="Recipe Author" required />
 
@@ -114,6 +108,8 @@
 
       <label>Recipe URL</label>
       <input type="url" id="credit_url" placeholder="Link to recipe" required />
+
+      <!-- End Credit Block -->
 
       <button type="submit">Submit Recipe</button>
     </form>
