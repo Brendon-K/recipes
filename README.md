@@ -1,6 +1,7 @@
+# Link to site
 https://brendon-k.github.io/recipes/frontend/html/
 
-Notes to add:
+# Notes to add:
 - [x] Sort ingredients by category
 - [x] Make autocomplete in recipe search work on mobile
 - [ ] CSS...
@@ -26,7 +27,7 @@ Notes to add:
       - Hopefully there's a database somewhere for this that I can use...
 - [ ] better login form
 
-REMINDER FOR ME
+## REMINDER FOR ME
 
 python -m http.server 5500
 
