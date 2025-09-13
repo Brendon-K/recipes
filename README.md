@@ -8,7 +8,8 @@ https://brendon-k.github.io/recipes/frontend/html/
 - [x] Remove time from recipe entry if it's 0
 - [x] Convert minutes to hours if lots of minutes
 - [x] Able to add tags to recipes so that you can search for a type of recipe. e.g. chicken, vegetarian, breakfast, snack, dessert, etc.
-  - [ ] Add tag button to existing recipe on search, as well as a tag box when creating a recipe (maybe just comma-separated instead of multiple boxes).
+  - [ ] Add tag button to existing recipe on search
+  - [x] Add a tag box when creating a recipe (maybe just comma-separated instead of multiple boxes).
 - [ ] Make selectable search function so you can search recipes by various terms. domain, author, tag, ingredient, etc.
   - [x] recipe title
   - [ ] domain
