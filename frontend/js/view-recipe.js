@@ -163,39 +163,39 @@ $(document).ready(function(){
 
     // generate html for full recipe info
     const $recipe_html = $(`
-        <div class="recipe">
-          <h2>${recipe.title}</h2>
-          
-          <p>${recipe.description}</p>
-          
-          <p>Servings: ${recipe.servings}</p>
-          <p>${format_time("Prep Time", recipe.prep_time)}</p>
-          <p>${format_time("Cook Time", recipe.cook_time)}</p>
-          <p>${format_time("Rest Time", recipe.rest_time)}</p>
+      <div class="recipe">
+        <h2>${recipe.title}</h2>
+        
+        <p>${recipe.description}</p>
+        
+        <p>Servings: ${recipe.servings}</p>
+        <p>${format_time("Prep Time", recipe.prep_time)}</p>
+        <p>${format_time("Cook Time", recipe.cook_time)}</p>
+        <p>${format_time("Rest Time", recipe.rest_time)}</p>
 
-          <div class="ingredients">
-            <h3>Ingredients</h3>
-            ${ingredient_categories_html}
-          </div>
-          
-          <div class="instructions">
-            <h3>Instructions</h3>
-            <button id="recipe-toggle-button" class="toggle-button">Show Simple</button>
-            <ol class="instructions-list detailed">${instructions_detailed_html}</ol>
-            <ol class="instructions-list simple" style="display:none;">${instructions_simple_html}</ol>
-          </div>
+        <div class="ingredients">
+          <h3>Ingredients</h3>
+          ${ingredient_categories_html}
+        </div>
+        
+        <div class="instructions">
+          <h3>Instructions</h3>
+          <button id="recipe-toggle-button" class="toggle-button">Show Simple</button>
+          <ol class="instructions-list detailed">${instructions_detailed_html}</ol>
+          <ol class="instructions-list simple" style="display:none;">${instructions_simple_html}</ol>
+        </div>
 
-          <div class="credit">
-            <p>Recipe by ${recipe.credit_author}. <a href="${recipe.credit_url}" target="_blank">${recipe.credit_domain}</a></p>
-          </div>
+        <div class="credit">
+          <p>Recipe by ${recipe.credit_author}. <a href="${recipe.credit_url}" target="_blank">${recipe.credit_domain}</a></p>
+        </div>
 
-          <div class="tags">
-            <div>
-              <h4>Tags</h4>
-              ${recipe.tags.map(tag => `<span class="tag">${tag.tag_name}</span>`).join(", ")}
-            </div>
+        <div class="tags">
+          <div>
+            <h4>Tags</h4>
+            ${recipe.tags.map(tag => `<span class="tag">${tag.tag_name}</span>`).join(", ")}
           </div>
         </div>
+      </div>
     `);
 
     // given a label and minutes, output time in hr, min format.
