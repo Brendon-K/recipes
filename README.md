@@ -1,4 +1,4 @@
-https://brendon-k.github.io/recipes/frontend/
+https://brendon-k.github.io/recipes/frontend/html/
 
 Notes to add:
 - [x] Sort ingredients by category
