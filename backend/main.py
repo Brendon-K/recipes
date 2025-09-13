@@ -39,7 +39,7 @@ class Ingredient(BaseModel):
   category: str
 
 class Tag(BaseModel):
-  name: str
+  tag_name: str
   description: str
 
 class Recipe(BaseModel):
@@ -61,18 +61,18 @@ class Recipe(BaseModel):
 async def get_recipes():
   try:
     # get all recipes from database
-    recipes = supabase.table("recipes").select("*").execute().data
+    recipes = supabase.from_("recipes").select("*").execute().data
 
     # add ingredients to each recipe
     for recipe in recipes:
-      ingredients = supabase.table("ingredients").select("*").eq("recipe_id", recipe["id"]).execute().data
+      ingredients = supabase.from_("ingredients").select("*").eq("recipe_id", recipe["id"]).execute().data
       recipe["ingredients"] = ingredients
 
     # add tags to each recipe
     for recipe in recipes:
-      tag_links = supabase.table("recipe_tags").select("tag_id").eq("recipe_id", recipe["id"]).execute().data
+      tag_links = supabase.from_("recipe_tags").select("tag_id").eq("recipe_id", recipe["id"]).execute().data
       tag_ids = [tag["tag_id"] for tag in tag_links]
-      tags = supabase.table("tags").select("*").in_("id", tag_ids).execute().data
+      tags = supabase.from_("tags").select("*").in_("id", tag_ids).execute().data
       recipe["tags"] = tags
     return recipes
   except Exception as e:
@@ -84,14 +84,14 @@ async def add_recipe(recipe: Recipe):
   # Insert recipe (no ingredients)
   try:
     # Remove ingredients from recipe because ingredients has a separate table
-    recipe_info = recipe.model_dump(exclude={"ingredients"})
-    res = supabase.table("recipes").insert(recipe_info).execute()
+    recipe_info = recipe.model_dump(exclude={"ingredients", "tags"})
+    res = supabase.from_("recipes").insert(recipe_info).execute()
 
     if not res.data:
       raise HTTPException(status_code=500, detail="No data returned from Supabase")
     
     # Get the recipe ID from Supabase after it's been pushed
-    # that way we can refer to it to add ingredients to their own table
+    # that way we can refer to it to add other stuff to their own table
     recipe_id = res.data[0]["id"]
 
   except Exception as e:
@@ -109,9 +109,42 @@ async def add_recipe(recipe: Recipe):
         "category": ingredient.category,
       })
 
-    supabase.table("ingredients").insert(ingredient_data).execute()
+    supabase.from_("ingredients").insert(ingredient_data).execute()
 
   except Exception as e:
     raise HTTPException(status_code=400, detail=f"Failed to insert ingredients: {str(e)}")
   
-  return {"message": "Recipe and ingredients added successfully", "recipe_id": recipe_id}
+  # Insert Tags
+  try:
+    tag_data = []
+    # Change Tag name to title format for consistency
+    for tag in recipe.tags:
+      tag_data.append({
+        "tag_name": tag.tag_name.title(),
+        "description": tag.description,
+      })
+    # Check each tag to see if they already exist in table. If not, then can add, but if it is then I guess keep the id or something for linking? idk
+    # tag_data at this point should be the correct format to push to Supabase
+    # but I want to check if it's in the table before I insert
+    for tag in tag_data:
+      tag_id = None
+      existing_tag = supabase.from_("tags").select("*").eq("tag_name", tag["tag_name"]).execute()
+      # Tag exists, so save existing id
+      if (existing_tag.data):
+        tag_id = existing_tag.data[0]["id"]
+      # Tag doesn't exist, so insert into tags table and save new id
+      else:
+        new_tag = supabase.from_("tags").insert(tag).execute()
+        tag_id = new_tag.data[0]["id"]
+      # Link tag to recipe
+      recipe_tag_data = {
+        "recipe_id": recipe_id,
+        "tag_id": tag_id,
+      }
+      # Insert recipe tag reference in recipe_tag table
+      supabase.from_("recipe_tags").insert(recipe_tag_data).execute()
+      
+  except Exception as e:
+    raise HTTPException(status_code=400, detail=f"Failed to insert tags: {str(e)}")
+  
+  return {"message": "Recipe, ingredients, and tags added successfully", "recipe_id": recipe_id}
