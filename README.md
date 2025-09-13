@@ -4,9 +4,8 @@ Notes to add:
 - [x] Sort ingredients by category
 - [x] Make autocomplete in recipe search work on mobile
 - [ ] CSS...
-- [ ] Remove time from recipe entry if it's 0
-- [ ] Convert minutes to hours, days if lots of minutes
-- [ ] Also change formatting of times section. It's kinda ugly, but I guess that's part of CSS
+- [x] Remove time from recipe entry if it's 0
+- [x] Convert minutes to hours if lots of minutes
 - [x] Able to add tags to recipes so that you can search for a type of recipe. e.g. chicken, vegetarian, breakfast, snack, dessert, etc.
   - [ ] Add tag button to existing recipe on search, as well as a tag box when creating a recipe (maybe just comma-separated instead of multiple boxes).
 - [ ] Make selectable search function so you can search recipes by various terms. domain, author, tag, ingredient, etc.
@@ -15,6 +14,8 @@ Notes to add:
   - [ ] author
   - [x] tag
   - [x] ingredient
+- [ ] Allow fractional entries in quantity (e.g. 1/8 teaspoon instead of .125 teaspoon)
+- [ ] "Cook Mode?" would it be possible to prevent phone from sleeping while recipe page is open?
 - [ ] *maybe* auto suggest units for consistency
 - [ ] *maybe* keep a list of ingredients that have been added to recipes, auto suggest for consistency
 - [ ] *maybe* add a new category in ingredients for modifiers. For example: "Fresh," "Warmed," "Canned," etc.
@@ -23,6 +24,7 @@ Notes to add:
     - Might also be challenging to combine weird measurements. Like cup + tablespon
     - Even MORE challenging to combine something like cup + gram as each ingredient will have its own distinct density. 
       - Hopefully there's a database somewhere for this that I can use...
+- [ ] better login form
 
 REMINDER FOR ME
 
