@@ -94,6 +94,8 @@ $(document).ready(function(){
         // if more than 1, display a list of links to click
         } else if (matches.length > 1) {
           display_recipe_list(matches);
+          // clear search box
+          $("#recipe-search-form")[0].reset();
         } else {
           alert("No recipes found!");
         }
@@ -193,10 +195,22 @@ $(document).ready(function(){
           <div>
             <h4>Tags</h4>
             ${recipe.tags.map(tag => `<span class="tag">${tag.tag_name}</span>`).join(", ")}
+            <button type="button" id="add-tag-button" class="hidden">Add a Tag</button>
           </div>
         </div>
       </div>
     `);
+
+    // makes add tag button visible if logged in
+    supabase_client.auth.getSession().then(({data}) => {
+      if (data.session) {
+        console.log("logged in");
+        $recipe_html.find("#add-tag-button").removeClass("hidden");
+      } else {
+        console.log("logged out");
+        $recipe_html.find("#add-tag-button").addClass("hidden");
+      }
+    });
 
     // given a label and minutes, output time in hr, min format.
     // if minutes is 0, will return empty string

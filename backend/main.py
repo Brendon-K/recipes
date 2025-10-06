@@ -123,9 +123,9 @@ async def add_recipe(recipe: Recipe):
         "tag_name": tag.tag_name.title(),
         "description": tag.description,
       })
-    # Check each tag to see if they already exist in table. If not, then can add, but if it is then I guess keep the id or something for linking? idk
+    # Check each tag to see if they already exist in table. If not, then can add, but if it is then keep the id for linking
     # tag_data at this point should be the correct format to push to Supabase
-    # but I want to check if it's in the table before I insert
+    # but I want to check if each tag is in the table before I insert
     for tag in tag_data:
       tag_id = None
       existing_tag = supabase.from_("tags").select("*").eq("tag_name", tag["tag_name"]).execute()
@@ -148,3 +148,8 @@ async def add_recipe(recipe: Recipe):
     raise HTTPException(status_code=400, detail=f"Failed to insert tags: {str(e)}")
   
   return {"message": "Recipe, ingredients, and tags added successfully", "recipe_id": recipe_id}
+
+# Add a tag to an existing recipe
+@app.post("/add-tag")
+async def add_tag():
+  print("add-tag")

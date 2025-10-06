@@ -28,7 +28,7 @@ $(document).ready(function() {
 
   // send user to log in page when log in button is pressed
   $("#header").on("click", "#log-in-button", function() {
-    window.location = "../html/login.html";
+    window.location = "login.html";
   });
 
   // allow the user to log out
@@ -42,6 +42,7 @@ $(document).ready(function() {
       $("#login-section").show();
       $("#logged-in-section").hide();
       $("#add-recipe-section").hide();
+      window.location.reload();
     }
   });
 });
