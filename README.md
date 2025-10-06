@@ -1,7 +1,7 @@
 # Link to site
 https://brendon-k.github.io/recipes/frontend/html/
 
-# Notes to add:
+# Notes to add
 - [x] Sort ingredients by category
 - [x] Make autocomplete in recipe search work on mobile
 - [ ] CSS...
@@ -16,6 +16,7 @@ https://brendon-k.github.io/recipes/frontend/html/
   - [ ] author
   - [x] tag
   - [x] ingredient
+- [ ] Add a visible indicator on the page to show if the recipes are still loading
 - [ ] Allow fractional entries in quantity (e.g. 1/8 teaspoon instead of .125 teaspoon)
 - [ ] "Cook Mode?" would it be possible to prevent phone from sleeping while recipe page is open?
 - [ ] *maybe* auto suggest units for consistency
@@ -27,6 +28,10 @@ https://brendon-k.github.io/recipes/frontend/html/
     - Even MORE challenging to combine something like cup + gram as each ingredient will have its own distinct density. 
       - Hopefully there's a database somewhere for this that I can use...
 - [ ] better login form
+
+# Issues
+- For some reason login/out buttons are being really stupid. Sometimes they both appear at the same time, which shouldn't happen.
+ - Choosing to ignore this until I implement CSS. idk if that'll even change anything but... whatever
 
 ## REMINDER FOR ME
 
